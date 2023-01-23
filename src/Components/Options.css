@@ -1,0 +1,11 @@
+.options{
+	display: flex;
+    justify-content: flex-start;
+	align-items: center;
+	padding-left: 20px;
+	height: 50px;
+	text-align: center;
+	color: #35368f;
+	background-color: #ffffff;
+	gap: 20px;
+}

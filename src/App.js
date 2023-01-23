@@ -1,77 +1,78 @@
-import Editor from '@monaco-editor/react';
-import { useEffect, useState } from 'react';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import './App.css';
+import Editor from "@monaco-editor/react";
+import Options from './Components/Options';
+import Axios from 'axios';
+import spinner from './assets/spinner';
+import { useState } from 'react';
 
 
-
-const FileUploader = ({ onFileLoad}) => {
-  return <input type="file" onChange={ (e) => onFileLoad(e.target.files[0])} />;
-};
 
 function App() {
-  const template= `#include <iostream>
-  using namespace std;
-  
-  int main() {
-    // your code goes here
-    return 0;
-  }
-  `;
-  const [file,setFile]=useState();
-  const [value, setValue]=useState();
-  const [language, setLanguage] = useState('cpp');
-  const handleChange = (event: SelectChangeEvent) => {
-      setLanguage(event.target.value);
-    };
+  const [temp, setTemp] = useState("jgdsfhbf");
 
-  
-  
-  useEffect(() => {
+const [userCode, setUserCode] = useState(``);
+const [userLang, setUserLang] = useState("cpp");
+const [userInput, setUserInput] = useState("");
+const [userOutput, setUserOutput] = useState("");
+const [loading, setLoading] = useState(false);
 
-    if(file) {
-      var reader =new FileReader();
-      reader.onload = async (e) => {
-        setValue(e.target.result);
-      };
-      reader.readAsText(file);
-      let newLanguage= 'cpp';
-      const extension =file.name.split('.').pop();
-      if([,'python',,'java'].includes(extension)) {
-        newLanguage=extension;
-      } else if (extension == 'md') {
-        newLanguage='markdown';
-      }
-      setLanguage(newLanguage);
-    }
-  },[file]);
+function compile() {
+	setLoading(true);
+	if (userCode === ``) {
+	return
+	}
+	Axios.post(``, {
+	code: userCode,
+	language: userLang,
+	input: userInput }).then((res) => {
+	setUserOutput(res.data.output);
+	}).then(() => {
+	setLoading(false);
+	})
+}
+function clearOutput() {
+	setUserOutput("");
+}
 
-  return (
-    <>
-    <div>
-    <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }} size="small">
-        <InputLabel id="language-type">Language</InputLabel>
-        <Select
-          labelId="language-type-label"
-          id="language-type"
-          
-          value={language}
-          onChange={handleChange}
-        >
-          <MenuItem value={'cpp'}>C++</MenuItem>
-          <MenuItem value={'python'}>Python3</MenuItem>
-          <MenuItem value={'java'}>Java</MenuItem>
-        </Select>
-</FormControl>
-    </div>
-    <Editor height="70vh" defaultLanguage={language}  defaultValue={template}  />
-    <FileUploader onFileLoad={setFile} />
-    </>
-    
-  );
+return (
+	<div className="App">
+	<Options userLang={userLang} setUserLang={setUserLang} />
+	<div className="main">
+		<div className="left-container">
+		<Editor
+			height="100vh"
+			width="100%"
+			defaultLanguage="cpp"
+			defaultValue={temp}
+			onChange={(value) => { setUserCode(value) }}
+		/>
+		<button className="run-btn" onClick={() => compile()}>
+			Run
+		</button>
+		</div>
+		<div className="right-container">
+		<h4>Input:</h4>
+		<div className="input-box">
+			<textarea id="code-inp" onChange=
+			{(e) => setUserInput(e.target.value)}>
+			</textarea>
+		</div>
+		<h4>Output:</h4>
+		{loading ? (
+			<div className="spinner-box">
+			<img src={spinner} alt="Loading..." />
+			</div>
+		) : (
+			<div className="output-box">
+			<pre>{userOutput}</pre>
+			<button onClick={() => { clearOutput() }}	className="clear-btn">
+				Clear
+			</button>
+			</div>
+		)}
+		</div>
+	</div>
+	</div>
+);
 }
 
 export default App;
