@@ -3,11 +3,17 @@ import Options from './Components/Options';
 import Axios from 'axios';
 import spinner from './assets/spinner';
 import { useState } from 'react';
-
+import './App.css';
 
 
 function App() {
-  const [temp, setTemp] = useState("jgdsfhbf");
+  // const template = [
+  //   {"cpp":"csjvbjhdvb"},
+  //   {"c":"dvvcsjvbjhdvb"},
+  //   {"python":"dvggcsjvbjhdvb"},
+  //   {"java":"fvfdcsjvbjhdvb"},
+
+  // ];
 
 const [userCode, setUserCode] = useState(``);
 const [userLang, setUserLang] = useState("cpp");
@@ -42,7 +48,7 @@ return (
 			height="100vh"
 			width="100%"
 			defaultLanguage="cpp"
-			defaultValue={temp}
+			defaultValue="kdbcjhds"
 			onChange={(value) => { setUserCode(value) }}
 		/>
 		<button className="run-btn" onClick={() => compile()}>

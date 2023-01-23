@@ -1,5 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
+import './Options.css';
 
 const Options = ({userLang, setUserLang}) => {
 	const languages = [
