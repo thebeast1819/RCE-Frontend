@@ -7,13 +7,6 @@ import './App.css';
 
 
 function App() {
-  // const template = [
-  //   {"cpp":"csjvbjhdvb"},
-  //   {"c":"dvvcsjvbjhdvb"},
-  //   {"python":"dvggcsjvbjhdvb"},
-  //   {"java":"fvfdcsjvbjhdvb"},
-
-  // ];
 
 const [userCode, setUserCode] = useState(``);
 const [userLang, setUserLang] = useState("cpp");
@@ -26,10 +19,12 @@ function compile() {
 	if (userCode === ``) {
 	return
 	}
-	Axios.post(``, {
-	code: userCode,
-	language: userLang,
-	input: userInput }).then((res) => {
+  const body = {
+    code: userCode,
+    language: userLang,
+    input: userInput };
+    console.log(body);
+	Axios.post(``, body).then((res) => {
 	setUserOutput(res.data.output);
 	}).then(() => {
 	setLoading(false);
@@ -48,7 +43,7 @@ return (
 			height="100vh"
 			width="100%"
 			defaultLanguage="cpp"
-			defaultValue="kdbcjhds"
+			defaultValue="//Enter your code here"
 			onChange={(value) => { setUserCode(value) }}
 		/>
 		<button className="run-btn" onClick={() => compile()}>
